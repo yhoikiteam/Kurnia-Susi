@@ -14,7 +14,7 @@
         body {
             font-family: 'Open Sans', sans-serif;
             overflow-x: hidden;
-            padding-bottom: 100px;
+            padding-bottom: 100px; /* Space for fixed bottom tab bar */
             background-size: 400% 400%;
             animation: gradientAnimation 20s ease infinite;
             color: #7d6b5e; /* Earthy brown/cream for general body text */
@@ -30,12 +30,13 @@
         /* Glassmorphism Tabs */
         .tab-nav-wrapper {
             position: fixed;
-            bottom: 25px;
+            bottom: 0; /* Changed from 25px to 0 for better mobile fit */
             left: 0;
             right: 0;
             z-index: 50;
             display: flex;
             justify-content: center;
+            padding-bottom: env(safe-area-inset-bottom); /* For iPhone X, etc. */
         }
 
         .tab-nav-container {
@@ -47,12 +48,12 @@
             padding: 0.6rem;
             display: flex;
             width: calc(100% - 2rem);
-            max-width: calc(48rem - 4rem);
+            max-width: 48rem; /* Simplified max-width for better consistency */
         }
         @media (min-width: 768px) {
             .tab-nav-container {
                 width: calc(100% - 8rem);
-                max-width: calc(48rem - 8rem);
+                max-width: calc(48rem - 4rem); /* Adjusting for larger screens */
             }
         }
 
@@ -68,6 +69,7 @@
             border-radius: 9999px;
             flex: 1;
             margin: 0 0.25rem;
+            min-width: 60px; /* Ensure minimum width for smaller screens */
         }
         .tab-button .icon {
             font-size: 1.5rem;
@@ -150,6 +152,26 @@
         }
 
         /* Responsive adjustments for tabs */
+        @media (max-width: 767px) {
+            .tab-button {
+                padding: 0.5rem 0.2rem; /* Reduce padding for smaller screens */
+                font-size: 0.65rem; /* Smaller font size for tab text */
+            }
+            .tab-button .icon {
+                font-size: 1.2rem; /* Smaller icon size */
+            }
+            .kurnia-name, .susi-name {
+                font-size: 2.5rem; /* Adjusted for smaller screens */
+            }
+            .ampersand {
+                font-size: 3.5rem; /* Adjusted for smaller screens */
+            }
+            .card {
+                padding: 1.5rem; /* Reduce card padding on small screens */
+                border-radius: 2rem; /* Slightly smaller border radius */
+            }
+        }
+
         @media (min-width: 768px) {
             .tab-button {
                 padding: 0.9rem 1.2rem;
@@ -442,10 +464,10 @@
             <p class="mb-4 text-brown-700 relative z-10">Dengan hormat, kami mengundang Anda ke kediaman kami untuk merayakan cinta ini.</p>
             <p class="mb-4 text-brown-600 relative z-10"><i class="fas fa-map-marker-alt mr-2 text-brown-500"></i> Markas KNA Audio, Ds. Gesengan, Dk. Omhtebu, RT 06 / RW 01, Kec. Cluwak, Kabupaten Pati, Jawa Tengah</p>
             <div class="rounded-xl overflow-hidden shadow-lg animate-fade-in-zoom relative z-10">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.9652909767096!2d110.98942777423736!3d-6.526067763798016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e712f98fff763e1%3A0x67111d31d5b50754!2sKNA%20audio!5e0!3m2!1sid!2sid!4v1753793934797!5m2!1sid!2sid" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.9652909767096!2d110.98942777423736!3d-6.526067763798016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e712f98fff763e1%3A0x67111d31d5b50754!2sKNA%20audio!5e0!3m2!1sid!2sid!4v1753884641327!5m2!1sid!2sid" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             <div class="text-center mt-6">
-                <a href="https://maps.app.goo.gl/D8ad6JKMGz2Y1hwW7" target="_blank" class="inline-block bg-brown-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-brown-600 focus:outline-none focus:ring-2 focus:ring-brown-400 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105">
+                <a href="https://maps.app.goo.gl/YourActualGoogleMapsLinkHere" target="_blank" class="inline-block bg-brown-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-brown-600 focus:outline-none focus:ring-2 focus:ring-brown-400 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105">
                     <i class="fas fa-map-marked-alt mr-2"></i> Buka Peta
                 </a>
             </div>
@@ -553,6 +575,12 @@
             document.getElementById(id).classList.add('active');
             element.classList.add('active-tab');
 
+            // Scroll to the top of the currently active tab content to prevent weird scrolling after tab switch
+            const activeTabContent = document.getElementById(id);
+            if (activeTabContent) {
+                activeTabContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
             AOS.refreshHard();
         }
 
@@ -560,7 +588,7 @@
             document.querySelector('.tab-button').classList.add('active-tab');
         });
 
-        const targetDate = new Date("August 8, 2025 10:00:00").getTime();
+        const targetDate = new Date("August 8, 2025 08:00:00").getTime(); // Changed to 08:00 WIB
         const countdownEl = document.getElementById("countdown");
 
         const updateCountdown = setInterval(() => {
@@ -588,6 +616,24 @@
                 alert("Nomor rekening berhasil disalin!");
             }).catch(err => {
                 console.error('Could not copy text: ', err);
+                // Fallback for older browsers or if navigator.clipboard is not available
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed"; // Avoid scrolling to bottom
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert("Nomor rekening berhasil disalin! (Fallback)");
+                } catch (ex) {
+                    console.error('Copy to clipboard failed (fallback): ', ex);
+                    alert("Gagal menyalin nomor rekening. Silakan salin secara manual: " + text);
+                } finally {
+                    document.body.removeChild(textArea);
+                }
             });
         }
 
