@@ -257,10 +257,16 @@
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s ease;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically align content */
+            justify-content: center; /* Horizontally align content */
         }
         .open-button:hover {
             background-color: #8b6d4c;
             transform: translateY(-3px);
+        }
+        .open-button .icon {
+            margin-right: 0.5rem; /* Space between icon and text */
         }
 
         /* Background gradient colors adjusted for cream theme */
@@ -373,7 +379,9 @@
         <h2 class="text-2xl md:text-3xl font-bold text-brown-700 mb-4 animate-float-up-fade">The Wedding Of</h2>
         <h1 class="text-6xl md:text-7xl font-bold text-brown-800 mb-8 tracking-wide leading-tight animate-bounce-in-down">Kurnia & Susi</h1>
         <p class="text-xl md:text-2xl text-brown-600 mb-10 animate-float-up-fade animation-delay-200">Kepada Yth.<br><span id="guestName" class="font-semibold">Bapak/Ibu/Saudara/i</span></p>
-        <button id="openInvitationBtn" class="open-button animate-fade-in-zoom animation-delay-400">Buka Undangan</button>
+        <button id="openInvitationBtn" class="open-button animate-fade-in-zoom animation-delay-400">
+            <i class="fas fa-scroll icon"></i> Buka Undangan
+        </button>
         <audio id="backgroundMusic" loop>
             <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
@@ -392,7 +400,7 @@
         <div class="text-center mb-10 py-8 relative z-10" data-aos="zoom-in" data-aos-duration="1200">
             <p class="text-lg text-brown-600 mb-2 animate-pulse-slow animate-bounce-in-down animation-delay-100">Dengan segala kerendahan hati, kami mengundang Anda untuk menjadi saksi cinta kami.</p>
             <h1 class="text-5xl md:text-6xl font-bold text-brown-800 mb-4 tracking-wide leading-tight animate-bounce-in-down animation-delay-300">Kurnia & Susi</h1>
-            <p class="text-xl md:text-2xl text-brown-700 animate-float-up-fade animation-delay-500">8–9 Agustus 2025 | Sebuah Kisah Dimulai</p>
+            <p class="text-xl md:text-2xl text-brown-700 animate-float-up-fade animation-delay-500">Acara pada tanggal 8-9 Agustus 2025</p>
         </div>
 
         <div id="mempelai" class="tab-content active relative z-10 card animate-float-up-fade" data-aos="fade-up" data-aos-duration="1000">
