@@ -27,6 +27,7 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
+        /* Glassmorphism Tabs */
         .tab-nav-wrapper {
             position: fixed;
             bottom: 0;
@@ -98,6 +99,7 @@
             color: #ffffff;
         }
 
+        /* Main Card Styling */
         .card {
             background-color: #ffffff;
             border-radius: 3rem;
@@ -126,6 +128,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
+        /* Text color adjustment - using new earthy palette */
         .text-cream-500 { color: #f8f5f0; }
         .text-brown-400 { color: #a17e5a; }
         .text-brown-500 { color: #8b6d4c; }
@@ -133,6 +136,7 @@
         .text-brown-700 { color: #5e4e43; }
         .text-brown-800 { color: #43362b; }
 
+        /* Partner Names Styling (Kurnia & Susi) */
         .kurnia-name, .susi-name {
             font-size: 3rem;
             line-height: 1.1;
@@ -147,6 +151,7 @@
             text-shadow: 1px 1px 4px rgba(0,0,0,0.15);
         }
 
+        /* Responsive adjustments for tabs */
         @media (max-width: 767px) {
             .tab-button {
                 padding: 0.5rem 0.2rem;
@@ -183,6 +188,7 @@
             }
         }
 
+        /* Floral Decorations */
         .floral-top-left, .floral-bottom-right {
             position: absolute;
             width: 180px;
@@ -215,6 +221,7 @@
             background-image: url('https://i.ibb.co/JpnHwF9/floral-design-bottom-right.png');
         }
 
+        /* Main Container Floral Accents */
         .main-container-floral-tl,
         .main-container-floral-br {
             position: absolute;
@@ -241,12 +248,14 @@
             background-image: url('https://i.ibb.co/JpnHwF9/floral-design-bottom-right.png');
         }
         
+        /* Background gradient colors adjusted for cream theme */
         body {
             background: linear-gradient(-45deg, #f8f5f0, #e0d8c0, #f8f5f0, #d3c4af);
             background-size: 400% 400%;
             animation: gradientAnimation 20s ease infinite;
         }
 
+        /* Existing Animations with adjustments for smoothness */
         @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -294,59 +303,18 @@
         .animation-delay-2000 { animation-delay: 2s; }
         .animation-delay-4000 { animation-delay: 4s; }
 
+        /* Staggered entry delays - adjusted for new base durations */
         .animation-delay-100 { animation-delay: 0.15s; }
         .animation-delay-200 { animation-delay: 0.3s; }
         .animation-delay-300 { animation-delay: 0.45s; }
         .animation-delay-400 { animation-delay: 0.6s; }
         .animation-delay-500 { animation-delay: 0.75s; }
         .animation-delay-600 { animation-delay: 0.9s; }
-
-        #opening-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f8f5f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            text-align: center;
-            transition: opacity 0.8s ease-in-out;
-        }
-        .fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-        #opening-screen button {
-            background-color: #a17e5a;
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 9999px;
-            font-size: 1rem;
-            margin-top: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out, background-color 0.3s ease;
-        }
-        #opening-screen button:hover {
-            transform: scale(1.05);
-            background-color: #8b6d4c;
-        }
     </style>
 </head>
 <body class="font-sans text-brown-600 min-h-screen flex flex-col justify-between py-10">
 
-        <div id="opening-screen" class="px-6">
-        <p class="text-xl text-brown-600 mb-2">The Wedding Of</p>
-        <h1 class="text-6xl md:text-8xl font-bold text-brown-800 mb-4 font-['Playfair_Display']">Kurnia & Susi</h1>
-        <p class="text-lg text-brown-700">Kepada Yth:</p>
-        <p class="text-2xl font-semibold text-brown-700 mt-2">[Nama Tamu]</p>
-        <button id="open-button">Buka Undangan</button>
-    </div>
-
-    <div class="max-w-3xl mx-auto p-6 bg-white rounded-3xl shadow-2xl relative overflow-hidden flex-grow mb-20 md:mb-0" style="display: none;" id="main-content">
+    <div class="max-w-3xl mx-auto p-6 bg-white rounded-3xl shadow-2xl relative overflow-hidden flex-grow mb-20 md:mb-0">
         <div class="main-container-floral-tl"></div>
         <div class="main-container-floral-br"></div>
 
@@ -399,10 +367,10 @@
             <p class="mb-4 text-brown-700 relative z-10">Dengan hormat, kami mengundang Anda ke kediaman kami untuk merayakan cinta ini.</p>
             <p class="mb-4 text-brown-600 relative z-10"><i class="fas fa-map-marker-alt mr-2 text-brown-500"></i> Markas KNA Audio, Ds. Gesengan, Dk. Omhtebu, RT 06 / RW 01, Kec. Cluwak, Kabupaten Pati, Jawa Tengah</p>
             <div class="rounded-xl overflow-hidden shadow-lg animate-fade-in-zoom relative z-10">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.916843469116!2d107.6186411147728!3d-6.899878195000572!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e658b15d9a29%3A0x6b093e7f4c7d0d0!2sMasjid%20Al-Akbar!5e0!3m2!1sid!2sid!4v1628169123023!5m2!1sid!2sid" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.9652909767096!2d110.98942777423736!3d-6.526067763798016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e712f98fff763e1%3A0x67111d31d5b50754!2sKNA%20audio!5e0!3m2!1sid!2sid!4v1753884641327!5m2!1sid!2sid" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             <div class="text-center mt-6">
-                                <a href="https://maps.app.goo.gl/..." target="_blank" class="inline-block bg-brown-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-brown-600 focus:outline-none focus:ring-2 focus:ring-brown-400 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105">
+                <a href="https://maps.app.goo.gl/YourActualGoogleMapsLinkHere" target="_blank" class="inline-block bg-brown-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-brown-600 focus:outline-none focus:ring-2 focus:ring-brown-400 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105">
                     <i class="fas fa-map-marked-alt mr-2"></i> Buka Peta
                 </a>
             </div>
@@ -445,7 +413,7 @@
         </div>
     </div>
 
-    <div class="tab-nav-wrapper" style="display: none;" id="nav-wrapper">
+    <div class="tab-nav-wrapper">
         <div class="tab-nav-container">
             <button onclick="openTab('mempelai', this)" class="tab-button active-tab">
                 <i class="fas fa-heart icon"></i>
@@ -470,8 +438,8 @@
         </div>
     </div>
 
-    <audio id="backgroundMusic" loop>
-        <source src="https://vocaroo.com/1m6Q0f1m6Q0f" type="audio/mpeg">
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="https://www.bensound.com/bensound-music/harmoni-wedding.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -486,27 +454,23 @@
 
         const backgroundMusic = document.getElementById('backgroundMusic');
         const ucapanForm = document.getElementById('ucapanForm');
-        const openButton = document.getElementById('open-button');
-        const openingScreen = document.getElementById('opening-screen');
-        const mainContent = document.getElementById('main-content');
-        const navWrapper = document.getElementById('nav-wrapper');
-        const urlParams = new URLSearchParams(window.location.search);
-        const namaTamu = urlParams.get('to') || 'Tamu Undangan';
 
-        // Update nama tamu di layar pembuka
-        document.querySelector('#opening-screen p:last-of-type').textContent = namaTamu;
-
-        // Tampilkan konten utama dan putar musik saat tombol "Buka Undangan" diklik
-        openButton.addEventListener('click', () => {
-            openingScreen.classList.add('fade-out');
-            setTimeout(() => {
-                openingScreen.style.display = 'none';
-                mainContent.style.display = 'block';
-                navWrapper.style.display = 'flex';
-                backgroundMusic.play().catch(error => console.log("Play failed:", error));
-                AOS.refreshHard();
-            }, 800);
+        // Autoplay music on page load, with a fallback for browser restrictions
+        document.addEventListener('DOMContentLoaded', () => {
+            backgroundMusic.play().catch(error => {
+                console.log("Autoplay prevented:", error);
+                // Optional: Show a play button if autoplay fails
+            });
+            AOS.refreshHard();
         });
+
+        // Add a single-touch event listener to handle cases where autoplay is blocked
+        document.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().catch(error => console.log("Manual play failed:", error));
+            }
+        }, { once: true });
+
 
         function openTab(id, element) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -519,6 +483,7 @@
             if (activeTabContent) {
                 activeTabContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+
             AOS.refreshHard();
         }
 
@@ -577,6 +542,7 @@
             });
         }
 
+        // WhatsApp integration
         if (ucapanForm) {
             ucapanForm.addEventListener('submit', function(event) {
                 event.preventDefault();
@@ -594,3 +560,5 @@
     </script>
 </body>
 </html>
+
+periksa dan perbaiki
