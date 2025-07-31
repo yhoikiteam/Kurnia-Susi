@@ -631,6 +631,103 @@
                 } catch (ex) {
                     console.error('Copy to clipboard failed (fallback): ', ex);
                     alert("Gagal menyalin nomor rekening. Silakan salin secara manual: " + text);
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            mirror: false,
+            duration: 1200,
+            easing: 'ease-out-cubic',
+        });
+
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const openingScreen = document.getElementById('openingScreen');
+        const guestNameSpan = document.getElementById('guestName');
+        const ucapanForm = document.getElementById('ucapanForm');
+
+        // Parse guest name from URL
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const toParam = urlParams.get('to');
+            if (toParam) {
+                guestNameSpan.textContent = decodeURIComponent(toParam).replace(/\+/g, ' ');
+            } else {
+                guestNameSpan.textContent = 'Bapak/Ibu/Saudara/i';
+            }
+
+            // Move the button variable and event listener inside DOMContentLoaded
+            const openInvitationBtn = document.getElementById('openInvitationBtn');
+            openInvitationBtn.addEventListener('click', () => {
+                openingScreen.classList.add('hidden');
+                backgroundMusic.play().catch(error => console.log("Autoplay prevented:", error));
+                // Trigger AOS animations after opening screen is hidden
+                AOS.refreshHard();
+            });
+        });
+
+        function openTab(id, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active-tab'));
+
+            document.getElementById(id).classList.add('active');
+            element.classList.add('active-tab');
+
+            // Scroll to the top of the currently active tab content to prevent weird scrolling after tab switch
+            const activeTabContent = document.getElementById(id);
+            if (activeTabContent) {
+                activeTabContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            AOS.refreshHard();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.tab-button').classList.add('active-tab');
+        });
+
+        const targetDate = new Date("August 8, 2025 08:00:00").getTime(); // Changed to 08:00 WIB
+        const countdownEl = document.getElementById("countdown");
+
+        const updateCountdown = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(updateCountdown);
+                countdownEl.innerHTML = "🎉 Acara telah dimulai! 🎉";
+                countdownEl.classList.add('bg-emerald-100', 'text-emerald-700');
+                countdownEl.classList.remove('text-brown-700', 'bg-amber-50');
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownEl.innerHTML = `Tinggal: ${days} hari ${hours} jam ${minutes} menit ${seconds} detik lagi!`;
+        }, 1000);
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Nomor rekening berhasil disalin!");
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                // Fallback for older browsers or if navigator.clipboard is not available
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed"; // Avoid scrolling to bottom
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert("Nomor rekening berhasil disalin! (Fallback)");
+                } catch (ex) {
+                    console.error('Copy to clipboard failed (fallback): ', ex);
+                    alert("Gagal menyalin nomor rekening. Silakan salin secara manual: " + text);
                 } finally {
                     document.body.removeChild(textArea);
                 }
@@ -651,5 +748,6 @@
             window.open(whatsappUrl, '_blank'); // Open WhatsApp in a new tab
         });
     </script>
+
 </body>
 </html>
