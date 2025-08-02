@@ -401,7 +401,7 @@
     </footer>
 
     <audio id="backgroundMusic" loop>
-        <source src="https://www.bensound.com/royalty-free-music/track/the-universes-embrace-emotional-gentle" type="audio/mpeg">
+        <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -424,8 +424,12 @@
 
         openButton.addEventListener('click', () => {
             // Memulai memutar musik saat tombol diklik
-            backgroundMusic.play().catch(error => {
+            backgroundMusic.play().then(() => {
+                console.log("Musik berhasil diputar.");
+            }).catch(error => {
                 console.error("Gagal memutar musik:", error);
+                // Tambahkan pesan visual jika perlu, misalnya:
+                // alert("Browser memblokir pemutaran musik otomatis. Silakan putar manual.");
             });
 
             // Sembunyikan layar pembuka dengan transisi yang halus
@@ -533,4 +537,3 @@
     </script>
 </body>
 </html>
-
