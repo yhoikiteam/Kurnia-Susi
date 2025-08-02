@@ -11,29 +11,648 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root {
-            --cream-light: #f8f5f0;
-            --cream-medium: #e0d8c0;
-            --cream-dark: #d3c4af;
-            --brown-light: #a17e5a;
-            --brown-medium: #8b6d4c;
-            --brown-dark: #7d6b5e;
-            --brown-darker: #5e4e43;
-            --brown-deep: #43362b;
-        }
-
         body {
             font-family: 'Open Sans', sans-serif;
             overflow-x: hidden;
-            background: linear-gradient(-45deg, var(--cream-light), var(--cream-medium), var(--cream-light), var(--cream-dark));
+            padding-bottom: 100px; /* Space for fixed bottom tab bar */
             background-size: 400% 400%;
             animation: gradientAnimation 20s ease infinite;
-            color: var(--brown-dark);
+            color: #7d6b5e; /* Earthy brown/cream for general body text */
             position: relative;
+            background-color: #f8f5f0; /* Base cream background */
         }
-
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Glassmorphism Tabs */
+        .tab-nav-wrapper {
+            position: fixed;
+            bottom: 0; /* Changed from 25px to 0 for better mobile fit */
+            left: 0;
+            right: 0;
+            z-index: 50;
+            display: flex;
+            justify-content: center;
+            padding-bottom: env(safe-area-inset-bottom); /* For iPhone X, etc. */
+        }
+
+        .tab-nav-container {
+            backdrop-filter: blur(15px);
+            background-color: rgba(255, 255, 255, 0.4); /* Slightly more opaque white */
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 6px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 9999px;
+            padding: 0.6rem;
+            display: flex;
+            width: calc(100% - 2rem);
+            max-width: 48rem; /* Simplified max-width for better consistency */
+        }
+        @media (min-width: 768px) {
+            .tab-nav-container {
+                width: calc(100% - 8rem);
+                max-width: calc(48rem - 4rem); /* Adjusting for larger screens */
+            }
+        }
+
+        .tab-button {
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.7rem 0.4rem;
+            color: rgba(125, 107, 94, 0.9); /* Earthy brown for tab text */
+            font-size: 0.75rem;
+            border-radius: 9999px;
+            flex: 1;
+            margin: 0 0.25rem;
+            min-width: 60px; /* Ensure minimum width for smaller screens */
+        }
+        .tab-button .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            color: rgba(94, 78, 67, 0.95); /* Darker earthy brown for icons */
+        }
+
+        .tab-button:hover {
+            transform: translateY(-5px);
+            color: #5e4e43;
+        }
+        .tab-button:hover .icon {
+            transform: scale(1.2);
+            color: #5e4e43;
+        }
+
+        .tab-button.active-tab {
+            color: #ffffff;
+            background-color: rgba(161, 126, 90, 0.9); /* Warm brown for active background */
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: rgba(161, 126, 90, 0.9);
+        }
+        .tab-button.active-tab .icon {
+            transform: scale(1.3);
+            color: #ffffff;
+        }
+
+        /* Main Card Styling */
+        .card {
+            background-color: #ffffff;
+            border-radius: 3rem;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.08); /* Lighter shadow */
+            padding: 3rem;
+            margin-bottom: 2.5rem;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.8); /* Slightly softer inner border */
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-10px) scale(1.005); /* Subtle scale on hover */
+            box-shadow: 0 25px 55px rgba(0,0,0,0.15); /* Slightly lighter shadow on hover */
+        }
+
+        .image-gallery img {
+            border-radius: 1.25rem;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease, box-shadow 0.5s ease;
+            filter: grayscale(50%); /* Less grayscale initially */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        .image-gallery img:hover {
+            transform: scale(1.1); /* Less scale on hover */
+            filter: grayscale(0%);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Text color adjustment - using new earthy palette */
+        .text-cream-500 { color: #f8f5f0; }
+        .text-brown-400 { color: #a17e5a; }
+        .text-brown-500 { color: #8b6d4c; }
+        .text-brown-600 { color: #7d6b5e; }
+        .text-brown-700 { color: #5e4e43; }
+        .text-brown-800 { color: #43362b; }
+
+        /* Partner Names Styling (Kurnia & Susi) */
+        .kurnia-name, .susi-name {
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 0.6rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        .ampersand {
+            font-size: 4rem;
+            margin: 1.25rem 0;
+            display: block;
+            color: #a17e5a; /* Warm brown for ampersand */
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+        }
+
+        /* Responsive adjustments for tabs */
+        @media (max-width: 767px) {
+            .tab-button {
+                padding: 0.5rem 0.2rem; /* Reduce padding for smaller screens */
+                font-size: 0.65rem; /* Smaller font size for tab text */
+            }
+            .tab-button .icon {
+                font-size: 1.2rem; /* Smaller icon size */
+            }
+            .kurnia-name, .susi-name {
+                font-size: 2.5rem; /* Adjusted for smaller screens */
+            }
+            .ampersand {
+                font-size: 3.5rem; /* Adjusted for smaller screens */
+            }
+            .card {
+                padding: 1.5rem; /* Reduce card padding on small screens */
+                border-radius: 2rem; /* Slightly smaller border radius */
+            }
+        }
+
+        @media (min-width: 768px) {
+            .tab-button {
+                padding: 0.9rem 1.2rem;
+                font-size: 0.95rem;
+            }
+            .tab-button .icon {
+                font-size: 2rem;
+            }
+            .kurnia-name, .susi-name {
+                font-size: 4rem;
+            }
+            .ampersand {
+                font-size: 5rem;
+            }
+        }
+
+        /* Floral Decorations */
+        .floral-top-left, .floral-bottom-right {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 0;
+            opacity: 0.6; /* Slightly less opaque */
+            transition: transform 0.8s ease-out;
+        }
+
+        .card:hover .floral-top-left {
+            transform: rotate(-12deg) scale(1.03) translateX(-3px) translateY(-3px);
+        }
+        .card:hover .floral-bottom-right {
+            transform: rotate(172deg) scale(1.03) translateX(3px) translateY(3px);
+        }
+
+        .floral-top-left {
+            top: -40px;
+            left: -40px;
+            transform: rotate(-10deg);
+            background-image: url('https://i.ibb.co/Lp21W2X/floral-design-top-left.png');
+        }
+
+        .floral-bottom-right {
+            bottom: -40px;
+            right: -40px;
+            transform: rotate(170deg);
+            background-image: url('https://i.ibb.co/JpnHwF9/floral-design-bottom-right.png');
+        }
+
+        /* Main Container Floral Accents */
+        .main-container-floral-tl,
+        .main-container-floral-br {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.3; /* Softer opacity */
+            z-index: 0;
+            transition: transform 0.8s ease-out, opacity 0.8s ease;
+        }
+
+        .main-container-floral-tl {
+            top: 10px;
+            left: 10px;
+            transform: rotate(15deg);
+            background-image: url('https://i.ibb.co/Lp21W2X/floral-design-top-left.png');
+        }
+
+        .main-container-floral-br {
+            bottom: 10px;
+            right: 10px;
+            transform: rotate(160deg);
+            background-image: url('https://i.ibb.co/JpnHwF9/floral-design-bottom-right.png');
+        }
+        
+        /* Opening Screen Styling */
+        .opening-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f8f5f0; /* Cream background */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 100;
+            transition: opacity 1s ease-out;
+            overflow: hidden; /* Hide overflow for blob animation */
+        }
+        .opening-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .open-button {
+            background-color: #a17e5a; /* Warm brown */
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 9999px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically align content */
+            justify-content: center; /* Horizontally align content */
+        }
+        .open-button:hover {
+            background-color: #8b6d4c;
+            transform: translateY(-3px);
+        }
+        .open-button .icon {
+            margin-right: 0.5rem; /* Space between icon and text */
+        }
+
+        /* Background gradient colors adjusted for cream theme */
+        body {
+            background: linear-gradient(-45deg, #f8f5f0, #e0d8c0, #f8f5f0, #d3c4af);
+            background-size: 400% 400%;
+            animation: gradientAnimation 20s ease infinite;
+        }
+
+        /* --- Blob Shapes for Opening Screen --- */
+        .opening-blob {
+            position: absolute;
+            background-color: rgba(161, 126, 90, 0.2); /* Soft brown transparent */
+            border-radius: 50%;
+            filter: blur(40px); /* More blur for a softer effect */
+            opacity: 0.6; /* Slightly more visible */
+            animation: blob 12s infinite cubic-bezier(0.4, 0.2, 0.2, 0.8); /* Slower, more fluid */
+        }
+
+        .opening-blob:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .opening-blob:nth-child(2) {
+            width: 250px;
+            height: 250px;
+            bottom: 15%;
+            right: 8%;
+            animation-delay: 4s;
+            background-color: rgba(189, 149, 114, 0.2); /* Slightly different shade */
+        }
+
+        .opening-blob:nth-child(3) {
+            width: 180px;
+            height: 180px;
+            top: 30%;
+            right: 15%;
+            animation-delay: 8s;
+            background-color: rgba(200, 160, 120, 0.2);
+        }
+
+        /* Existing Animations with adjustments for smoothness */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes pulse-light {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.04); opacity: 1; }
+        }
+        .animate-pulse-light { animation: pulse-light 3s infinite ease-in-out; }
+        
+        @keyframes bounce-in-down {
+            0% { opacity: 0; transform: translateY(-300px); }
+            60% { opacity: 1; transform: translateY(15px); }
+            80% { transform: translateY(-8px); }
+            100% { transform: translateY(0); }
+        }
+        .animate-bounce-in-down { animation: bounce-in-down 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; }
+        
+        @keyframes float-up-fade {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-float-up-fade { animation: float-up-fade 1.2s ease-out forwards; }
+        
+        @keyframes fade-in-zoom {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fade-in-zoom { animation: fade-in-zoom 1.2s ease-out; }
+        
+        @keyframes pulse-fade {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.03); }
+        }
+        .animate-pulse-fade { animation: pulse-fade 2.5s infinite ease-in-out; }
+        
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(40px, -60px) scale(1.15); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob { animation: blob 10s infinite cubic-bezier(0.6, 0.2, 0.1, 1.0); }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+
+        /* Staggered entry delays - adjusted for new base durations */
+        .animation-delay-100 { animation-delay: 0.15s; }
+        .animation-delay-200 { animation-delay: 0.3s; }
+        .animation-delay-300 { animation-delay: 0.45s; }
+        .animation-delay-400 { animation-delay: 0.6s; }
+        .animation-delay-500 { animation-delay: 0.75s; }
+        .animation-delay-600 { animation-delay: 0.9s; }
+    </style>
+</head>
+<body class="font-sans text-brown-600 min-h-screen flex flex-col justify-between py-10">
+
+    <div id="openingScreen" class="opening-screen">
+        <div class="opening-blob"></div>
+        <div class="opening-blob"></div>
+        <div class="opening-blob"></div>
+
+        <h2 class="text-2xl md:text-3xl font-bold text-brown-700 mb-4 animate-float-up-fade">The Wedding Of</h2>
+        <h1 class="text-6xl md:text-7xl font-bold text-brown-800 mb-8 tracking-wide leading-tight animate-bounce-in-down">Kurnia & Susi</h1>
+        <p class="text-xl md:text-2xl text-brown-600 mb-10 animate-float-up-fade animation-delay-200">Kepada Yth.<br><span id="guestName" class="font-semibold">Bapak/Ibu/Saudara/i</span></p>
+        <button id="openInvitationBtn" class="open-button animate-fade-in-zoom animation-delay-400">
+            <i class="fas fa-scroll icon"></i> <p>Buka Undangan</p>
+        </button>
+        <audio id="backgroundMusic" loop>
+            <source src="https://www.bensound.com/bensound-music/harmoni-wedding.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <div class="max-w-3xl mx-auto p-6 bg-white rounded-3xl shadow-2xl relative overflow-hidden flex-grow mb-20 md:mb-0">
+        <div class="main-container-floral-tl"></div>
+        <div class="main-container-floral-br"></div>
+
+        <div class="absolute top-0 left-0 w-36 h-36 bg-amber-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob"></div>
+        <div class="absolute bottom-0 right-0 w-36 h-36 bg-rose-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob animation-delay-2000"></div>
+        <div class="absolute top-1/4 right-1/4 w-28 h-28 bg-emerald-100 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-4000"></div>
+
+
+        <div class="text-center mb-10 py-8 relative z-10" data-aos="zoom-in" data-aos-duration="1200">
+            <p class="text-lg text-brown-600 mb-2 animate-pulse-slow animate-bounce-in-down animation-delay-100">Dengan segala kerendahan hati, kami mengundang Anda untuk menjadi saksi cinta kami.</p>
+            <h1 class="text-5xl md:text-6xl font-bold text-brown-800 mb-4 tracking-wide leading-tight animate-bounce-in-down animation-delay-300">Kurnia & Susi</h1>
+            <p class="text-xl md:text-2xl text-brown-700 animate-float-up-fade animation-delay-500">Acara pada tanggal 8-9 Agustus 2025</p>
+        </div>
+
+        <div id="mempelai" class="tab-content active relative z-10 card animate-float-up-fade" data-aos="fade-up" data-aos-duration="1000">
+            <div class="floral-top-left"></div>
+            <div class="floral-bottom-right"></div>
+            <div class="text-center relative z-10">
+                <h2 class="font-bold text-brown-700 kurnia-name">Kurnia Budi Setyawan</h2>
+                <p class="text-brown-600 mb-1">Putra tercinta dari Bapak Sukarno & Ibu Satini</p>
+                <p class="text-base text-brown-500">Ds. Gesengan, Dk. Omhtebu, RT 06 / RW 01</p>
+
+                <span class="ampersand font-bold animate-pulse-light">&</span>
+
+                <h2 class="font-bold text-brown-700 susi-name">Susi Wulandari</h2>
+                <p class="text-brown-600 mb-1">Putri terkasih dari Bapak Waluyo & Ibu Sulikah</p>
+                <p class="text-base text-brown-500">Ds. Ngablak, Dk. Gowangkong, RT 05 / RW 03</p>
+            </div>
+        </div>
+
+        <div id="acara" class="tab-content relative z-10 card animate-float-up-fade" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+            <div class="floral-top-left"></div>
+            <div class="floral-bottom-right"></div>
+            <h3 class="text-2xl font-semibold mb-4 text-brown-700 relative z-10">Rangkaian Acara Sakral Kami</h3>
+            <p class="text-brown-600 mb-6 relative z-10">Dengan penuh syukur, kami mengundang Bapak/Ibu/Saudara/i untuk hadir pada momen berbahagia kami:</p>
+            <div class="grid md:grid-cols-1 gap-8 relative z-10">
+                <div class="p-4 rounded-lg bg-amber-50 shadow-inner animate-float-up-fade animation-delay-100">
+                    <p class="text-brown-700 font-semibold mb-1">Acara</p>
+                    <p class="text-brown-600">Jumat - Sabtu, 8 - 9 Agustus 2025</p>
+                    <p class="text-brown-600">Pukul 08.00 WIB - Selesai</p>
+                    <p class="text-sm text-brown-500 mt-2">Sebuah ikrar suci akan terucap dan kami berharap dapat berbagi kebahagiaan dengan keluarga, kerabat, dan sahabat tercinta.</p>
+                </div>
+            </div>
+            <div id="countdown" class="mt-10 text-center text-2xl font-extrabold text-brown-700 bg-amber-50 p-4 rounded-lg animate-pulse-fade relative z-10" data-aos="zoom-in" data-aos-delay="300"></div>
+        </div>
+
+        <div id="lokasi" class="tab-content relative z-10 card animate-float-up-fade" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+            <div class="floral-top-left"></div>
+            <div class="floral-bottom-right"></div>
+            <h3 class="text-2xl font-semibold mb-4 text-brown-700 relative z-10">Tempat Cinta Kami Bersemi</h3>
+            <p class="mb-4 text-brown-700 relative z-10">Dengan hormat, kami mengundang Anda ke kediaman kami untuk merayakan cinta ini.</p>
+            <p class="mb-4 text-brown-600 relative z-10"><i class="fas fa-map-marker-alt mr-2 text-brown-500"></i> Markas KNA Audio, Ds. Gesengan, Dk. Omhtebu, RT 06 / RW 01, Kec. Cluwak, Kabupaten Pati, Jawa Tengah</p>
+            <div class="rounded-xl overflow-hidden shadow-lg animate-fade-in-zoom relative z-10">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.9652909767096!2d110.98942777423736!3d-6.526067763798016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e712f98fff763e1%3A0x67111d31d5b50754!2sKNA%20audio!5e0!3m2!1sid!2sid!4v1753884641327!5m2!1sid!2sid" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="text-center mt-6">
+                <a href="https://maps.app.goo.gl/YourActualGoogleMapsLinkHere" target="_blank" class="inline-block bg-brown-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-brown-600 focus:outline-none focus:ring-2 focus:ring-brown-400 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105">
+                    <i class="fas fa-map-marked-alt mr-2"></i> Buka Peta
+                </a>
+            </div>
+        </div>
+
+        <div id="amplop" class="tab-content relative z-10 card animate-float-up-fade" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+            <div class="floral-top-left"></div>
+            <div class="floral-bottom-right"></div>
+            <h3 class="text-2xl font-semibold mb-4 text-brown-700 relative z-10">Tali Kasih & Doa Restu</h3>
+            <p class="mb-4 text-brown-700 relative z-10">Kehadiran dan doa restu Anda adalah anugerah terbesar bagi kami. Namun, jika Anda berkenan memberikan tanda kasih, dapat melalui rekening berikut:</p>
+            <div class="bg-gradient-to-r from-amber-50 to-rose-50 p-6 rounded-xl shadow-md relative z-10 text-center">
+                <p class="text-lg font-semibold text-brown-800 mb-2">BANK BRI</p>
+                <p id="bankAccountNumber" class="text-3xl font-bold text-brown-700 mb-4 tracking-wider">595601001107506</p>
+                <button onclick="copyToClipboard('595601001107506')" class="bg-brown-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-brown-700 focus:outline-none focus:ring-2 focus:ring-brown-500 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105">
+                    <i class="fas fa-copy mr-2"></i> Salin Rekening
+                </button>
+                <p class="mt-4 text-sm text-brown-600">A.N. KURNIA BUDI SETYAWAN</p>
+            </div>
+            <p class="mt-6 text-center text-brown-600 relative z-10">Terima kasih atas segala kebaikan dan perhatian Anda.</p>
+        </div>
+
+        <div id="ucapan" class="tab-content relative z-10 card animate-float-up-fade" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+            <div class="floral-top-left"></div>
+            <div class="floral-bottom-right"></div>
+            <h3 class="text-2xl font-semibold mb-4 text-brown-700 relative z-10">Untaian Doa & Harapan</h3>
+            <p class="mb-4 text-brown-700 relative z-10">Silakan tinggalkan pesan dan doa terbaik Anda untuk kebahagiaan pernikahan kami.</p>
+            <form id="ucapanForm" class="bg-amber-50 p-6 rounded-xl shadow-inner animate-float-up-fade animation-delay-100 relative z-10">
+                <div class="mb-5">
+                    <label for="name" class="block text-brown-700 text-sm font-bold mb-2">Nama Anda</label>
+                    <input type="text" id="name" placeholder="Nama Anda" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brown-500 transition duration-200" required>
+                </div>
+                <div class="mb-5">
+                    <label for="message" class="block text-brown-700 text-sm font-bold mb-2">Ucapan & Doa</label>
+                    <textarea id="message" placeholder="Tulis ucapan dan doa terbaik Anda di sini..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brown-500 transition duration-200" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105">
+                    <i class="fab fa-whatsapp mr-2"></i> Kirim Via WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="tab-nav-wrapper">
+        <div class="tab-nav-container">
+            <button onclick="openTab('mempelai', this)" class="tab-button active-tab">
+                <i class="fas fa-heart icon"></i>
+                <span>Mempelai</span>
+            </button>
+            <button onclick="openTab('acara', this)" class="tab-button">
+                <i class="fas fa-calendar-alt icon"></i>
+                <span>Acara</span>
+            </button>
+            <button onclick="openTab('lokasi', this)" class="tab-button">
+                <i class="fas fa-map-marker-alt icon"></i>
+                <span>Lokasi</span>
+            </button>
+            <button onclick="openTab('amplop', this)" class="tab-button">
+                <i class="fas fa-gift icon"></i>
+                <span>Amplop Digital</span>
+            </button>
+            <button onclick="openTab('ucapan', this)" class="tab-button">
+                <i class="fas fa-envelope-open-text icon"></i>
+                <span>Ucapan</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            mirror: false,
+            duration: 1200,
+            easing: 'ease-out-cubic',
+        });
+
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const openInvitationBtn = document.getElementById('openInvitationBtn');
+        const openingScreen = document.getElementById('openingScreen');
+        const guestNameSpan = document.getElementById('guestName');
+        const ucapanForm = document.getElementById('ucapanForm');
+
+        // Parse guest name from URL
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const toParam = urlParams.get('to');
+            if (toParam) {
+                guestNameSpan.textContent = decodeURIComponent(toParam).replace(/\+/g, ' ');
+            } else {
+                guestNameSpan.textContent = 'Bapak/Ibu/Saudara/i';
+            }
+        });
+
+        openInvitationBtn.addEventListener('click', () => {
+            openingScreen.classList.add('hidden');
+            backgroundMusic.play().catch(error => console.log("Autoplay prevented:", error));
+            // Trigger AOS animations after opening screen is hidden
+            AOS.refreshHard();
+        });
+
+        function openTab(id, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active-tab'));
+
+            document.getElementById(id).classList.add('active');
+            element.classList.add('active-tab');
+
+            // Scroll to the top of the currently active tab content to prevent weird scrolling after tab switch
+            const activeTabContent = document.getElementById(id);
+            if (activeTabContent) {
+                activeTabContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            AOS.refreshHard();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.tab-button').classList.add('active-tab');
+        });
+
+        const targetDate = new Date("August 8, 2025 08:00:00").getTime(); // Changed to 08:00 WIB
+        const countdownEl = document.getElementById("countdown");
+
+        const updateCountdown = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(updateCountdown);
+                countdownEl.innerHTML = "🎉 Acara telah dimulai! 🎉";
+                countdownEl.classList.add('bg-emerald-100', 'text-emerald-700');
+                countdownEl.classList.remove('text-brown-700', 'bg-amber-50');
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownEl.innerHTML = `Tinggal: ${days} hari ${hours} jam ${minutes} menit ${seconds} detik lagi!`;
+        }, 1000);
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Nomor rekening berhasil disalin!");
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                // Fallback for older browsers or if navigator.clipboard is not available
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed"; // Avoid scrolling to bottom
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert("Nomor rekening berhasil disalin! (Fallback)");
+                } catch (ex) {
+                    console.error('Copy to clipboard failed (fallback): ', ex);
+                    alert("Gagal menyalin nomor rekening. Silakan salin secara manual: " + text);
+                } finally {
+                    document.body.removeChild(textArea);
+                }
+            });
+        }
+
+        // WhatsApp integration
+        ucapanForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            const whatsappNumber = '6289508969718'; // Your WhatsApp number
+
+            const fullMessage = `Nama: ${name}\nUcapan & Doa: ${message}\n\nDari Undangan Pernikahan Kurnia & Susi`;
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(fullMessage)}`;
+
+            window.open(whatsappUrl, '_blank'); // Open WhatsApp in a new tab
+        });
+    </script>
+</body>
+</html>
         }
 
         /* Animations */
@@ -502,3 +1121,4 @@
     </script>
 </body>
 </html>
+
